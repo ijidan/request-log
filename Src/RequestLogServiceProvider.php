@@ -15,7 +15,7 @@ class RequestLogServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        $this->app->singleton('request-log', function ($app) {
+        $this->app->singleton('request_log', function ($app) {
             return new RequestLogLogic();
         });
     }
@@ -27,7 +27,7 @@ class RequestLogServiceProvider extends ServiceProvider {
     public function boot() {
 
         $this->publishes([
-            __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'request-log.php' => config_path('request-log.php')
+            __DIR__ . '/config/request-log.php' => config_path('request-log.php')
         ]);
     }
 
@@ -35,6 +35,6 @@ class RequestLogServiceProvider extends ServiceProvider {
      * @return string[]
      */
     public function provides(): array {
-        return ['request-log'];
+        return ['request_log'];
     }
 }

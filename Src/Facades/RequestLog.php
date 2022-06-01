@@ -19,7 +19,7 @@ class RequestLog extends Facade {
      * @return string
      */
     protected static function getFacadeAccessor(): string {
-        return 'request-log';
+        return 'request_log';
     }
 
 }
