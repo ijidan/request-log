@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Config;
  * Class RequestLogRepo
  * @package App\Repository
  */
-class RequestLog {
+class RequestLogLogic {
 
     /**
      * topic

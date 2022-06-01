@@ -15,10 +15,10 @@ class RequestLogServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        $this->app->singleton(RequestLog::class, function ($app) {
-            return new RequestLog();
+        $this->app->singleton(RequestLogLogic::class, function ($app) {
+            return new RequestLogLogic();
         });
-        $this->app->alias(RequestLog::class, 'request-log');
+        $this->app->alias(RequestLogLogic::class, 'request-log');
     }
 
     /**
@@ -36,6 +36,6 @@ class RequestLogServiceProvider extends ServiceProvider {
      * @return string[]
      */
     public function provides(): array {
-        return [RequestLog::class, 'request-log'];
+        return [RequestLogLogic::class, 'request-log'];
     }
 }
