@@ -29,6 +29,7 @@ class WriteRequestLog {
 		// 获取request_id
 		$requestId = $request->headers->get('x-request-id', (string)Str::uuid());
 		$request->headers->set('x-request-id', $requestId);
+		$this->writeSQLLog();;
 		$response = $next($request);
 		$this->writeLog($request, $response);
 		return $response;
