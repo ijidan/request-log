@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Log;
+use IJidan\RequestLog\Facades\RequestLog as FacadesRequest;
 
 /**
  * 请求日志
@@ -54,7 +55,7 @@ class WriteRequestLog {
 					'request_id' => $requestId
 				]);
 			}
-			RequestLog::sendSqlLog($requestId, (float)$query->time, $realSql);
+			FacadesRequest::sendSqlLog($requestId, (float)$query->time, $realSql);
 		});
 	}
 
@@ -67,8 +68,8 @@ class WriteRequestLog {
 	 */
 	private function writeLog(Request $request, $response) {
 		if ($response instanceof Response || $response instanceof JsonResponse) {
-			RequestLog::sendRequestLog($request, $response);
-			RequestLog::flush();
+			FacadesRequest::sendRequestLog($request, $response);
+			FacadesRequest::flush();
 		}
 	}
 
