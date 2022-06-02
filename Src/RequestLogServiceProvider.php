@@ -4,12 +4,12 @@ namespace IJidan\RequestLog;
 
 use Illuminate\Support\ServiceProvider;
 
-
 /**
  * Class RequestLogServiceProvider
  * @package IJidan\RequestLog
  */
 class RequestLogServiceProvider extends ServiceProvider {
+
     /**
      * Register services.
      * @return void
