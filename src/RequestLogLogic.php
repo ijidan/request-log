@@ -45,9 +45,15 @@ class RequestLogLogic {
 		}
 
 		if (isset($headers['x-request-id']) && $headers['x-request-id'][0]) {
-			$user = $request->user('api');
+			try {
+				$user = $request->user('api');
+				$userId = is_object($user) ? $user->id : 0;
+			}catch (\Exception $exception){
+				$userId =0;
+			}
+
 			$route = $request->route();
-			$userId = is_object($user) ? $user->id : 0;
+
 			$type = 'req';
 			$log = [
 				'request_id'   => $headers['x-request-id'][0],
@@ -61,7 +67,7 @@ class RequestLogLogic {
 					'route_id'       => $request['x-route-id'] ?? '',
 					'url_address'    => $request['x-url-address'] ?? '',
 					'api_route_uri'  => $route->uri(),
-					'api_route_name' => $route->action['as'],
+					'api_route_name' => (string)$route->getAction('as'),
 					'api'            => $request->path(),
 					'method'         => $request->method(),
 					'params'         => $this->hideKeywordParam($request),
