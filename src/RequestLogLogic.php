@@ -36,10 +36,9 @@ class RequestLogLogic {
 	 * 发送请求日志
 	 * @param Request $request
 	 * @param mixed   $response
-	 * @param string  $business
 	 * @return void
 	 */
-	public function sendRequestLog(Request $request, $response, string $business = 'oak') {
+	public function sendRequestLog(Request $request, $response) {
 		$headers = $request->headers->all();
 		if (isset($headers['authorization'])) {
 			unset($headers['authorization']);
@@ -54,7 +53,7 @@ class RequestLogLogic {
 				'request_id'   => $headers['x-request-id'][0],
 				'type'         => $type,
 				'trigger_time' => microtime(true),
-				'business'     => $business,
+				'business'     => Config::get('request-log.business'),
 				'data'         => [
 					'user_id'        => $userId,
 					'receive_time'   => LARAVEL_START,
@@ -102,17 +101,16 @@ class RequestLogLogic {
 	 * @param string $requestId
 	 * @param float  $duration
 	 * @param string $realSql
-	 * @param string $business
 	 * @return void
 	 */
-	public function sendSqlLog(string $requestId, float $duration, string $realSql, string $business = 'oak') {
+	public function sendSqlLog(string $requestId, float $duration, string $realSql) {
 		$type = 'sql';
 		if ($requestId) {
 			$log = [
 				'request_id'   => $requestId,
 				'type'         => $type,
 				'trigger_time' => microtime(true),
-				'business'     => $business,
+				'business'     => Config::get('request-log.business'),
 				'data'         => [
 					'duration' => $duration,
 					'query'    => $realSql
@@ -127,17 +125,16 @@ class RequestLogLogic {
 	 * 发送业务日志
 	 * @param array  $record
 	 * @param string $requestId
-	 * @param string $business
 	 * @return void
 	 */
-	public function sendBusinessLog(array $record, string $requestId, string $business = 'oak') {
+	public function sendBusinessLog(array $record, string $requestId) {
 		$type = 'business';
 		if ($requestId) {
 			$log = [
 				'request_id'   => $requestId,
 				'type'         => $type,
 				'trigger_time' => microtime(true),
-				'business'     => $business,
+				'business'     => Config::get('request-log.business'),
 				'data'         => [
 					'message' => $record['message'],
 					'context' => $record['context'],
