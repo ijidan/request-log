@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Log;
 use IJidan\RequestLog\Facades\RequestLog as FacadesRequest;
+use Illuminate\Support\Facades\Config;
 
 /**
  * 请求日志
@@ -40,8 +41,10 @@ class WriteRequestLog {
 	 * @return void
 	 */
 	private function writeSQLLog() {
-		$isLocal = app()->environment('local');
-		DB::listen(function (QueryExecuted $query) use ($isLocal) {
+		$writeLocalSql = Config::get('request-log.write_local_sql');
+		$localSqlChannel = Config::get('request-log.local_sql_channel');
+
+		DB::listen(function (QueryExecuted $query) use ($writeLocalSql,$localSqlChannel) {
 			$realSql = vsprintf(str_replace('?', '%s', $query->sql), collect($query->bindings)->map(function ($binding) {
 				return is_numeric($binding) ? $binding : "'{$binding}'";
 			})->toArray());
@@ -49,8 +52,8 @@ class WriteRequestLog {
 			$duration = $this->formatDuration($query->time / 1000);
 			$content = sprintf('[%s] [%s] %s |', $query->connection->getDatabaseName(), $duration, $realSql);
 
-			if ($isLocal) {
-				Log::channel('sql')->info($content, [
+			if ($writeLocalSql && $localSqlChannel) {
+				Log::channel($localSqlChannel)->info($content, [
 					'method'     => request()->method(),
 					'uri'        => request()->getRequestUri(),
 					'request_id' => $requestId
