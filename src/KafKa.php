@@ -66,11 +66,12 @@ class KafKa {
      */
     public function sendMessage(array $messageData) {
         if ($messageData) {
+	        $timeout = Config::get('request-log.send_timeout');
             try {
                 $this->topic->produce(RD_KAFKA_PARTITION_UA, 0, json_encode($messageData));
                 $this->producer->poll(0);
-                for ($flushRetries = 0; $flushRetries < 2; $flushRetries++) {
-                    $result = $this->producer->flush(1000);
+                for ($flushRetries = 0; $flushRetries < 1; $flushRetries++) {
+                    $result = $this->producer->flush($timeout);
                     if (RD_KAFKA_RESP_ERR_NO_ERROR === $result) {
                         break;
                     }
