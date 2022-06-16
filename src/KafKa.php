@@ -51,6 +51,7 @@ class KafKa {
         $conf = new  Conf();
         $conf->set('metadata.broker.list', $broker);
         $conf->set('request.required.acks', -1);
+	    $conf->set('log_level',0);
         try {
             $this->producer = new Producer($conf);
             $this->topic = $this->producer->newTopic($topic);
