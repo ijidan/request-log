@@ -40,10 +40,6 @@ class RequestLogLogic {
 	 */
 	public function sendRequestLog(Request $request, $response) {
 		$headers = $request->headers->all();
-		if (isset($headers['authorization'])) {
-			unset($headers['authorization']);
-		}
-
 		if (isset($headers['x-request-id']) && $headers['x-request-id'][0]) {
 			try {
 				$user = $request->user('api');
